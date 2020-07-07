@@ -1,18 +1,21 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
+    <div>
+      <img src="./assets/logo.png">
+    </div>
+    <!-- <router-link to="/">Home</router-link> |
+    <router-link to="/home/about">About</router-link> |
+    <router-link to="/home/hello">HelloWorld</router-link> -->
+    <router-view/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import Home from './components/Home'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  // components:[Home]
 }
 </script>
 

@@ -1,9 +1,31 @@
-// 创建Router类
-- 转存options
-- 提前处理路由表，缓存path和route的映射map，避免每次都循环遍历
-- 定义响应式current属性，代表当前hash路由
-- 添加hashChange事件和load事件监听
-- 事件处理函数职责：变更响应式属性current
+import Vue from 'vue'
+import Router from './vue-router'
+import HelloWorld from '../components/HelloWorld.vue'
+import Home from '../components/Home.vue'
+import About from '../components/About.vue'
 
-// 实现插件install方法
-- 保存Vue根实例传入的router选项
+// 安装插件
+Vue.use(Router)
+
+// 实例化一个Router 暴露出去
+export default new Router({
+  routes:[
+    {
+      path: '/', 
+      component:Home,
+      name:'home',
+      children:[
+        {
+          path: 'about', 
+          name: 'about', 
+          component:About 
+        },
+        {
+          path: 'hello', 
+          name: 'hello', 
+          component:HelloWorld 
+        }
+      ]
+    }
+  ]
+})
