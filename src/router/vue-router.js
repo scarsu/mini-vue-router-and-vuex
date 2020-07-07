@@ -7,16 +7,16 @@ class Router{
   constructor(options){
     // - 转存options
     this.$options = options
-    
+
+    // - 通过Vue.util.defineReactive API定义一个响应式数据
+    // Vue.util.defineReactive(this,'current','')
+    this.current = window.location.hash.slice(1) || '/'
     
     // - 提前处理路由表，缓存path和route的映射map，避免每次都循环遍历
       // TODO:解决嵌套路由
     this._routeMap = {'':{}}
     this.walkRoutes(this.$options.routes)
-    console.log(this._routeMap)
-
-    // - 通过Vue.util.defineReactive API定义一个响应式数据
-    Vue.util.defineReactive(this,'current','')
+    // console.log(this._routeMap)
     
     // - 添加hashChange事件和load事件监听
     window.addEventListener('hashchange',this.onHashChange.bind(this))
@@ -31,6 +31,7 @@ class Router{
     }
   }
   getNameFromPath(path){
+    //路由匹配时获取代表深度层级的 matched数组
     return this.recursePath(this.$options.routes,'',path)
   }
   recursePath(routes,curPath,targetPath){
@@ -80,7 +81,6 @@ class Router{
 Router.install = function(Vue){
   // 转存构造函数
   _Vue = Vue
-  debugger
   
   // 通过全局混入，将 传给Vue根实例的 router实例 挂载在Vue原型上
   Vue.mixin({
@@ -105,6 +105,22 @@ Router.install = function(Vue){
       }
     },
     render(h){
+      // 添加一个标记 用于判断一个组件是不是routerView组件
+      this.$vnode.data.isRouterView = true
+
+      // routerView的深度标记
+      let depth = 0
+      let parent = this.$parent
+      while(parent){
+        if(
+          parent.$vnode && 
+          parent.$vnode.data && 
+          parent.$vnode.data.isRouterView){
+            depth++
+          }
+        parent = parent.$parent
+      }
+
       // render函数一定要有return!
       // render函数里的this是vue实例!
       // h(tag, attrs, children)
@@ -121,7 +137,6 @@ Router.install = function(Vue){
   Vue.component('router-view',{
     render(h){
       const current = this.$router.current
-      debugger
       const component = this.$router._routeMap[current].component || null
       return h(component)
     }

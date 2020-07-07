@@ -1,7 +1,12 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
+    <h1>$store.state.count👇</h1>
+    <h1>{{ $store.state.count }}</h1>
+    <h1>$store.doubleCount(getters)👇</h1>
+    <h1>{{ $store.doubleCount }}</h1>
+    <button @click="$store.commit('addCount')">addCount</button>
+    <button @click="$store.dispatch('addCountAsync')">addCountAsync</button>
+    <!-- <h2>Essential Links</h2>
     <ul>
       <li>
         <a
@@ -79,7 +84,7 @@
           awesome-vue
         </a>
       </li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 
